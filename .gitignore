@@ -1,0 +1,6 @@
+.idea/
+docker_compose.iml
+node_modules/
+proxy/node_modules/
+proxy/package-lock.json
+package-lock.json

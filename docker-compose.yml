@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  proxy:
+    build: ./proxy
+    ports:
+      - "9000:9000"
+    container_name: proxy
+    volumes:
+      - "./proxy:/usr/src/proxy"
+    environment:
+      - services=["nodejsapp1", "nodejsapp2", "nodejsapp3"]
+      - servicePort=8080
+  nodejsapp1:
+    build: .
+    container_name: nodejsapp1
+    volumes:
+      - ".:/usr/src/nodejsApp"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/postgres
+
+  nodejsapp2:
+    build: .
+    container_name: nodejsapp2
+    volumes:
+      - ".:/usr/src/nodejsApp"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/postgres
+
+  nodejsapp3:
+    build: .
+    container_name: nodejsapp3
+    volumes:
+      - ".:/usr/src/nodejsApp"
+    depends_on:
+      - postgres
+    environment:
+      - DATABASE_URL=postgres://postgres:password@postgres:5432/postgres
+
+  postgres:
+    image: postgres:latest
+    volumes:
+      - /var/lib/docker/volumes/persistence/_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: password
