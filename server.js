@@ -24,6 +24,12 @@ app.get('/number', (req, res) => {
     showNumbers(res);
 });
 
+app.get('/slow', (req, res) => {
+    let startingTime = new Date().getTime();
+    while (new Date().getTime() - startingTime <= 30000){}
+    res.send("Server is ready!!!!!!!");
+});
+
 app.get('/', (req, res) => {
     res.send(
         `<form method="post" action="/number"><input type="number" name="number" 

@@ -23,12 +23,20 @@ const discoverService = function (req) {
     services.add(serviceName);
 };
 
-app.get('*', (req, res) => {
+const getUrl = function(serviceName, port, url){
+    return `http://${serviceName}:${port}${url}`;
+};
+
+const handleGetRequest = (req, res) => {
     let service = getService();
-    const url = `http://${service}:${servicePort}${req.url}`;
+    const url = getUrl(service, servicePort, req.url);
     request.get(url, (err, options, data) => {
         res.send(data);
     });
+};
+
+app.get('*', (req, res) => {
+    handleGetRequest(req, res);
 });
 
 app.post('*', (req, res) => {
