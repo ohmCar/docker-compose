@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const port = 9000;
-const services = JSON.parse(process.env.services);
+const services = new Set([]);
 const servicePort = process.env.servicePort;
 
 let counter = 0;
@@ -11,10 +11,16 @@ const request = require('request');
 app.use(express.urlencoded({extended: true}));
 
 const getService = function() {
-    let numberOfServices = services.length;
-    let service = services[counter % numberOfServices];
+    let spinningServices = [...services];
+    let numberOfServices = spinningServices.length;
+    let service = spinningServices[counter % numberOfServices];
     counter++;
     return service;
+};
+
+const discoverService = function (req) {
+    let serviceName = req.body.serviceName;
+    services.add(serviceName);
 };
 
 app.get('*', (req, res) => {
@@ -26,6 +32,11 @@ app.get('*', (req, res) => {
 });
 
 app.post('*', (req, res) => {
+    if(req.url === "/discover"){
+        discoverService(req);
+        res.send("OK");
+        return;
+    }
     let service = getService();
     let url = `http://${service}:${servicePort}${req.url}`;
     request.post(url, {form: req.body}, (err, options, data) => {

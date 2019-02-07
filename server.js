@@ -5,6 +5,7 @@ const client = new Client(connectionString);
 client.connect();
 
 const express = require('express');
+const request = require('request');
 const app = express();
 const port = 8080;
 
@@ -36,4 +37,10 @@ app.post('/number', (req, res) => {
     showNumbers(res);
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+
+app.listen(port, () => {
+    request.post("http://proxy:9000/discover", {form: {serviceName: process.env.service_name}}, (err, options, data) => {
+
+    });
+    console.log(`Listening on port ${port}`);
+});

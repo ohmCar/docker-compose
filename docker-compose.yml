@@ -9,7 +9,6 @@ services:
     volumes:
       - "./proxy:/usr/src/proxy"
     environment:
-      - services=["nodejsapp1", "nodejsapp2", "nodejsapp3"]
       - servicePort=8080
   nodejsapp1:
     build: .
@@ -19,6 +18,7 @@ services:
     depends_on:
       - postgres
     environment:
+      - service_name=nodejsapp1
       - DATABASE_URL=postgres://postgres:password@postgres:5432/postgres
 
   nodejsapp2:
@@ -29,6 +29,7 @@ services:
     depends_on:
       - postgres
     environment:
+      - service_name=nodejsapp2
       - DATABASE_URL=postgres://postgres:password@postgres:5432/postgres
 
   nodejsapp3:
@@ -39,6 +40,7 @@ services:
     depends_on:
       - postgres
     environment:
+      - service_name=nodejsapp3
       - DATABASE_URL=postgres://postgres:password@postgres:5432/postgres
 
   postgres:
