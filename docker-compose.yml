@@ -3,16 +3,21 @@ version: '3'
 services:
   proxy:
     build: ./proxy
+    image: ohmcar/proxy
     ports:
       - "9000:9000"
+      - "80:9000"
     container_name: proxy
+    restart: on-failure
     volumes:
       - "./proxy:/usr/src/proxy"
     environment:
       - servicePort=8080
   nodejsapp1:
     build: .
+    image: ohmcar/nodejsapp1
     container_name: nodejsapp1
+    restart: on-failure
     volumes:
       - ".:/usr/src/nodejsApp"
     depends_on:
@@ -23,7 +28,9 @@ services:
 
   nodejsapp2:
     build: .
+    image: ohmcar/nodejsapp2
     container_name: nodejsapp2
+    restart: on-failure
     volumes:
       - ".:/usr/src/nodejsApp"
     depends_on:
@@ -34,7 +41,9 @@ services:
 
   nodejsapp3:
     build: .
+    image: ohmcar/nodejsapp3
     container_name: nodejsapp3
+    restart: on-failure
     volumes:
       - ".:/usr/src/nodejsApp"
     depends_on:
@@ -45,6 +54,8 @@ services:
 
   postgres:
     image: postgres:latest
+    container_name: postgres
+    restart: on-failure
     volumes:
       - /var/lib/docker/volumes/persistence/_data:/var/lib/postgresql/data
     environment:
